@@ -19,6 +19,7 @@ socket.on('newMessage', function(data) {
     });
 
     jQuery('#messages').append(html);
+    scrollToBottom();
 });
 
 socket.on('newLocationMessage', function(data) {
@@ -32,6 +33,7 @@ socket.on('newLocationMessage', function(data) {
     });
 
     jQuery('#messages').append(html);
+    scrollToBottom();
 });
 
 jQuery('#message-form').on('submit', function(event) {
@@ -66,3 +68,18 @@ locationButton.on('click', function() {
         locationButton.attr('disabled', false).text('Send location');
     }, {enableHighAccuracy: true});
 });
+
+function scrollToBottom() {
+    let messages = jQuery('#messages');
+    let newMessage = messages.children('li:last-child');
+
+    let clientHeight = messages.prop('clientHeight');
+    let scrollTop = messages.prop('scrollTop');
+    let scrollHeight = messages.prop('scrollHeight');
+    let newMessageHeight = newMessage.innerHeight();
+    let lastMessageHeight = newMessage.prev().innerHeight();
+
+    if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+        messages.scrollTop(scrollHeight);
+    }
+}
